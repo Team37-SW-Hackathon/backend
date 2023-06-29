@@ -15,4 +15,8 @@ import java.io.Serializable;
 
 public class GptQuestionRequest implements Serializable {
         private String question;
+
+        public GptQuestionRequest(String question) {
+                this.question = question;
+        }
 }

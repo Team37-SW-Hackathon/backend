@@ -2,12 +2,10 @@ package SWHackathonTeam37.SimplePrompt.controller;
 
 import SWHackathonTeam37.SimplePrompt.controller.dto.request.GptQuestionRequest;
 import SWHackathonTeam37.SimplePrompt.controller.dto.response.GptResponse;
+import SWHackathonTeam37.SimplePrompt.controller.dto.response.PickedResponse;
 import SWHackathonTeam37.SimplePrompt.service.GptService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -26,4 +24,5 @@ public class GptController {
     public String sendRequest(@RequestBody @Valid GptQuestionRequest request) {
         return gptService.getAnswer(request);
     }
+
 }

@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 
 @Service
@@ -33,6 +35,21 @@ public class FileUploadService {
                 new PutObjectRequest(S3Bucket, originalName, multipartFile.getInputStream(), objectMetaData)
                         .withCannedAcl(CannedAccessControlList.PublicRead)
         );
+
+        String fileUrl = amazonS3Client.getUrl(S3Bucket, originalName).toString();
+        return fileUrl;
+    }
+
+    public String uploadByFileName(String fileName) throws IOException {
+        File file = new File(fileName);
+        String originalName = file.getName();
+
+        ObjectMetadata objectMetadata = new ObjectMetadata();
+        objectMetadata.setContentType("application/octet-stream");
+        objectMetadata.setContentLength(file.length());
+
+        amazonS3Client.putObject(new PutObjectRequest(S3Bucket, originalName, new FileInputStream(file), objectMetadata)
+                .withCannedAcl(CannedAccessControlList.PublicRead));
 
         String fileUrl = amazonS3Client.getUrl(S3Bucket, originalName).toString();
         return fileUrl;

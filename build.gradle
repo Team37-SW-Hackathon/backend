@@ -51,6 +51,11 @@ dependencies {
 	// test
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
+	// 문서화
+	implementation 'com.aspose:aspose-words:22.10:jdk17'
+	implementation 'org.apache.poi:poi:4.1.2'
+	implementation 'org.apache.poi:poi-ooxml:4.1.2'
+
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'com.mysql:mysql-connector-j' // local & prod
 }
@@ -59,7 +64,6 @@ tasks.named('test') {
 	useJUnitPlatform()
 }
 
-// (4) queryDSL 추가 : QueryDSL 빌드 옵션
 def querydslDir = "$buildDir/generated/querydsl"
 
 querydsl {
@@ -74,4 +78,10 @@ configurations {
 }
 compileQuerydsl {
 	options.annotationProcessorPath = configurations.querydsl
+}
+
+repositories {
+	maven {
+		url 'https://releases.aspose.com/java/repo/'
+	}
 }

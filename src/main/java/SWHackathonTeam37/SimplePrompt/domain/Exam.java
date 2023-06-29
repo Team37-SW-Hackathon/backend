@@ -17,7 +17,7 @@ public class Exam {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private int subject; // 0 영어, 1 국어
+    private int subject; // 1 국어, 2 영어
 
     private String examFileName;
 
@@ -30,13 +30,13 @@ public class Exam {
     @CreatedDate
     private LocalDate createDate;
 
-    private Exam(int subject, String originalFileUrl, String examFileUrl, String answerFileUrl) {
-        this.subject = subject;
-        this. originalFileUrl = originalFileUrl;
-        this.examFileUrl = examFileUrl;
-        this.answerFileUrl = answerFileUrl;
-        this.examFileName = null;
-    }
+//    private Exam(int subject, String originalFileUrl, String examFileUrl, String answerFileUrl) {
+//        this.subject = subject;
+//        this. originalFileUrl = originalFileUrl;
+//        this.examFileUrl = examFileUrl;
+//        this.answerFileUrl = answerFileUrl;
+//        this.examFileName = null;
+//    }
 
     public String getExamFileName() {
         if (examFileName == null) {

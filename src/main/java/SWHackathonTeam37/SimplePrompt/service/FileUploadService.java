@@ -19,7 +19,7 @@ public class FileUploadService {
     private final AmazonS3Client amazonS3Client;
 
     @Value( "${cloud.aws.s3.bucket}")
-    private String S3Bucket; // Bucket 이름
+    private String S3Bucket;
 
     public String upload(MultipartFile multipartFile) throws IOException {
         String originalName = multipartFile.getOriginalFilename();
@@ -29,13 +29,12 @@ public class FileUploadService {
         objectMetaData.setContentType(multipartFile.getContentType());
         objectMetaData.setContentLength(size);
 
-        // S3에 업로드
         amazonS3Client.putObject(
                 new PutObjectRequest(S3Bucket, originalName, multipartFile.getInputStream(), objectMetaData)
                         .withCannedAcl(CannedAccessControlList.PublicRead)
         );
 
-        String imagePath = amazonS3Client.getUrl(S3Bucket, originalName).toString();
-        return imagePath;
+        String fileUrl = amazonS3Client.getUrl(S3Bucket, originalName).toString();
+        return fileUrl;
     }
 }

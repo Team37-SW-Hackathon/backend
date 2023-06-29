@@ -225,19 +225,19 @@ public class ExamService {
         questionList = new ArrayList<>();
         answerList = new ArrayList<>();
 
-        int circle = 1;
+        int circle = 0;
 
         for (String passage : passageList) {
             if (questionType.contains(circle)) {
-                if (circle == 1) {
+                if (circle == 0) {
                     type_1(passage);
-                } else if (circle == 2) {
+                } else if (circle == 1) {
                     type_2(passage);
-                } else if (circle == 3) {
+                } else if (circle == 2) {
                     type_3(passage);
-                } else if (circle == 4) {
+                } else if (circle == 3) {
                     type_4(passage);
-                } else if (circle == 5) {
+                } else if (circle == 4) {
                     type_5(passage);
                 }
             }

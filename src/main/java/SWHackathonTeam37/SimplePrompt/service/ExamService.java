@@ -49,7 +49,7 @@ public class ExamService {
     }
 
 
-    public void makeExam(String originalFileUrl, int subject, int exampType, int questionType) throws IOException {
+    public void makeExam(String originalFileUrl, int subject, List<Integer> questionType, int startPage, int endPage) throws IOException {
         // 1. pdf ->  word -> text 변환
         // 2. 지문 추출
         List<String> passageList = new ArrayList<>();

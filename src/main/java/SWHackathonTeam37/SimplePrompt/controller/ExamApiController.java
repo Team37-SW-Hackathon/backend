@@ -18,7 +18,7 @@ public class ExamApiController {
 
     @PostMapping("")
     public ResponseEntity<Void> create(@RequestBody @Valid ExamRequest request) throws Exception {
-        examService.makeExam(request.fileUrl(), request.subject(), request.examType(), request.questionType());
+        examService.makeExam(request.fileUrl(), request.subject(), request.questionType(), request.startPage(), request.endPage());
         return ResponseEntity.ok().build();
     }
 

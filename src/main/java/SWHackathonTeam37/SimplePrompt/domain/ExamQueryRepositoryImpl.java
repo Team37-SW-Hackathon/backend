@@ -21,7 +21,7 @@ public class ExamQueryRepositoryImpl implements ExamQueryRepository {
     @Override
     public Slice<SimpleExam> findExamBySubject(int subject, Pageable pageable) {
         List<SimpleExam> result = query
-                .select(Projections.constructor(SimpleExam.class, exam.id, exam.subject, exam.examFileName, exam.createDate, exam.examFileUrl, exam.answerFileUrl))
+                .select(Projections.constructor(SimpleExam.class, exam.id, exam.subject, exam.examFileName, exam.createDate, exam.examFileUrl, exam.answerFileUrl, exam.totalCount))
                 .from(exam)
                 .where(exam.subject.eq(subject))
                 .orderBy(exam.createDate.desc())

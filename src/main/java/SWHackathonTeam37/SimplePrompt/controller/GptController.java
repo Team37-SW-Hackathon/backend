@@ -14,6 +14,7 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("/gpts")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost")
 public class GptController {
 
     private final GptService gptService;

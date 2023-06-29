@@ -1,6 +1,7 @@
 package SWHackathonTeam37.SimplePrompt.service;
 
 import SWHackathonTeam37.SimplePrompt.controller.dto.request.GptQuestionRequest;
+import SWHackathonTeam37.SimplePrompt.domain.Exam;
 import SWHackathonTeam37.SimplePrompt.domain.ExamRepository;
 import SWHackathonTeam37.SimplePrompt.service.dto.response.ExamAssembler;
 import SWHackathonTeam37.SimplePrompt.service.dto.response.SimpleExam;
@@ -170,10 +171,22 @@ public class ExamService {
         }
         
         // 4. 문제를 파일로
-        String examFileName = createDocument(passageList, questionList);
 
-        // 5. 클라우드에 파일 올리기
-        fileUploadService.uploadByFileName(examFileName);
+        String examFileName = createDocument(passageList, questionList);
+        String answerFileName = createDocument(questionList, answerList);
+
+        String examFileURL = fileUploadService.uploadByFileName(examFileName);
+        String answerFileURL = fileUploadService.uploadByFileName(answerFileName);
+
+        Exam entity = Exam.builder()
+                .subject(subject)
+                .originalFileUrl(originalFileUrl)
+                .examFileUrl(examFileURL)
+                .answerFileUrl(answerFileURL)
+                .examFileName(examFileName)
+                .build();
+        examRepository.save(entity);
+
     }
 
     public String createDocument(List<String> passageList, List<String> questionList) {

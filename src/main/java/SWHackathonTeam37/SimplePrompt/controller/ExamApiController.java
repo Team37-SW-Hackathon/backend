@@ -13,6 +13,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/exam")
+@CrossOrigin(origins = "http://localhost")
 public class ExamApiController {
     private final ExamService examService;
 

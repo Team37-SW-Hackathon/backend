@@ -1,6 +1,7 @@
 package SWHackathonTeam37.SimplePrompt.domain;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
@@ -32,13 +33,14 @@ public class Exam {
 
     private int totalCount;
 
-//    private Exam(int subject, String originalFileUrl, String examFileUrl, String answerFileUrl) {
-//        this.subject = subject;
-//        this. originalFileUrl = originalFileUrl;
-//        this.examFileUrl = examFileUrl;
-//        this.answerFileUrl = answerFileUrl;
-//        this.examFileName = null;
-//    }
+    @Builder
+    private Exam(int subject, String originalFileUrl, String examFileUrl, String answerFileUrl, String examFileName) {
+        this.subject = subject;
+        this.originalFileUrl = originalFileUrl;
+        this.examFileUrl = examFileUrl;
+        this.answerFileUrl = answerFileUrl;
+        this.examFileName = examFileName;
+    }
 
     public String getExamFileName() {
         if (examFileName == null) {

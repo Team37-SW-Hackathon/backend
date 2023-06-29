@@ -8,10 +8,12 @@ import lombok.RequiredArgsConstructor;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
+import org.json.JSONObject;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -25,6 +27,7 @@ import java.util.Random;
 public class ExamService {
     private final ExamRepository examRepository;
     private final GptService gptService;
+    private final FileUploadService fileUploadService;
     public static final String first_prompt = "위 영어지문을 한 문장, 10단어 이내로 영어로 요약하세요\n.json 타입으로 key값은 summary를 사용하세요.";
     public static final String second_prompt = "위 요약문에서 핵심 단어 하나를 Json타입으로 작성하세요. key 값은 \"word\"를 사용하세요";
     public static final String third_prompt = "위 요약문에서 {word} 단어를 지우고 그 위치에 @@@기호를 넣어서 새 요약문을 Json타입으로 작성하세요. key 값은 \"script\"를 사용하세요.\n";
@@ -46,7 +49,7 @@ public class ExamService {
     }
 
 
-    public void makeExam(String originalFileUrl, int subject, int exampType, int questionType) {
+    public void makeExam(String originalFileUrl, int subject, int exampType, int questionType) throws IOException {
         // 1. pdf ->  word -> text 변환
         // 2. 지문 추출
         List<String> passageList = new ArrayList<>();
@@ -55,23 +58,44 @@ public class ExamService {
         List<String> answerList = new ArrayList<>();
 
         for (String passage : passageList) {
+            List<String> wrong_answer = new ArrayList<>();
+
             String summary = first_question(passage);
             String word = second_question(summary);
             String script = third_question(summary);
             String answer = fourth_question(word);
 
+            JSONObject jObject1 = new JSONObject(summary);
+            summary = jObject1.getString("summary");
+
+            JSONObject jObject2 = new JSONObject(summary);
+            word = jObject2.getString("word");
+
+            JSONObject jObject3 = new JSONObject(script);
+            script = jObject3.getString("script");
+
+            JSONObject jObject4 = new JSONObject(answer);
+            wrong_answer.add(jObject4.getString("1"));
+            wrong_answer.add(jObject4.getString("2"));
+            wrong_answer.add(jObject4.getString("3"));
+            wrong_answer.add(word);
+
+            Collections.shuffle(wrong_answer);
+
             questionList.add(script);
+            questionList.add("\n1. " + wrong_answer.get(0) + "\n2. " + wrong_answer.get(1) + "\n3. " + wrong_answer.get(2) + "\n4. " + wrong_answer.get(3) + "\n\n");
             answerList.add(word);
-            answerList.add(answer);
         }
 
 
-
         // 4. 문제를 파일로
+        String examFileName = createDocument(passageList, questionList);
+
         // 5. 클라우드에 파일 올리기
+        fileUploadService.uploadByFileName(examFileName);
     }
 
-    public void createDocument(List<String> passageList, List<String> questionList) {
+    public String createDocument(List<String> passageList, List<String> questionList) {
         XWPFDocument document = new XWPFDocument();
 
         XWPFParagraph paragraph = document.createParagraph();
@@ -79,7 +103,7 @@ public class ExamService {
 
         String result = "";
         for (int i = 0; i < passageList.size(); i++) {
-            result += Integer.toString(i+1) + passageList.get(i) + "\n" + questionList.get(i);
+            result += Integer.toString(i+1) + passageList.get(i) + "\n" + questionList.get(i) + "\n\n";
         }
 
         run.setText(result);
@@ -91,6 +115,7 @@ public class ExamService {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return fileName;
     }
 
     public ExamAssembler getList(int subject) {

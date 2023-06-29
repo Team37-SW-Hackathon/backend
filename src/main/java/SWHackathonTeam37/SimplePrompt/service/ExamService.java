@@ -152,7 +152,6 @@ public class ExamService {
         }
 
         for (String passage : passageList) {
-            ArrayList<String> wrong_answer = new ArrayList<>();
 
             String ret1 = first_question_3(passage);
 
@@ -166,7 +165,7 @@ public class ExamService {
                 String explanation = jsonObject.getString("explanation");
 
                 questionList.add(question + "\n" + explanation + "\n\n" + "\n1. " + options.getString("1") + "\n2. " + options.getString("2") + "\n3. " + options.getString("3") + "\n4. " + options.getString("4") + "\n\n");
-                wrong_answer.add(answer);
+                answerList.add(answer);
             }
         }
         

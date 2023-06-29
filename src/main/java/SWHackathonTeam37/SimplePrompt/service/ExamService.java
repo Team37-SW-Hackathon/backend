@@ -25,6 +25,51 @@ public class ExamService {
         // 5. 클라우드에 파일 올리기
     }
 
+    public void workbook1(String doc){
+
+        List<String> workbook = new ArrayList<>();
+
+        workbook = doc.split(" ");
+
+        Collections.shuffle(workbook);
+
+        return workbook;
+    }
+
+    public void workbook2(String doc){
+
+        List<String> workbook = new ArrayList<>();
+
+        workbook = doc.split(".");
+
+        return workbook;
+    }
+
+    public void workbook3(String doc){
+
+        List<String> var = new ArrayList<>();
+        List<String> workbook = new ArrayList<>();
+        
+        int len = 0;
+        var = doc.split(".");
+
+        len = var.length;
+
+        if (len>1){
+            for(int i = 1 ; i < len ; i += 2){
+                workbook.add(var[i-1] + var[i]);
+            }
+        
+            if(len & 2 == 1){
+                workbook.add(var[-1]);
+            }
+        }
+        
+        Collections.shuffle(workbook);
+
+        return workbook;
+    }
+
     private void uploadToAmazonS3() {
 
     }

@@ -2,8 +2,8 @@ package SWHackathonTeam37.SimplePrompt.controller;
 
 import SWHackathonTeam37.SimplePrompt.config.GptConfig;
 import SWHackathonTeam37.SimplePrompt.controller.dto.request.GptQuestionRequest;
-import SWHackathonTeam37.SimplePrompt.controller.dto.response.GptResponse;
 import SWHackathonTeam37.SimplePrompt.service.GptService;
+import SWHackathonTeam37.SimplePrompt.service.dto.response.GptResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

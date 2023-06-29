@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -47,15 +48,13 @@ public class ExamService {
 
         run.setText(result);
 
-       String fileName = "시험지" + Math.random() * 10000 +".docx";
+        String fileName = "시험지" + Math.random() * 10000 +".docx";
         try (FileOutputStream outputStream = new FileOutputStream(fileName)) {
             document.write(outputStream);
             System.out.println("Word 파일이 생성되었습니다.");
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
     }
 
     public ExamAssembler getList(int subject) {
@@ -67,5 +66,33 @@ public class ExamService {
         for (Long id : idList) {
             examRepository.deleteById(id);
         }
+    }
+
+    public List<String> workbook1(String doc){
+        List<String> workbook = List.of(doc.split(" "));
+        Collections.shuffle(workbook);
+        return workbook;
+    }
+
+    public List<String> workbook2(String doc){
+        List<String> workbook = List.of(doc.split("."));
+        return workbook;
+    }
+
+    public List<String> workbook3(String doc){
+        List<String> var = List.of(doc.split("."));
+        int len = var.size();
+
+        List<String> workbook = new ArrayList<>();
+        if (len > 1) {
+            for(int i = 1 ; i < len ; i += 2){
+                workbook.add(var.get(i-1) + var.get(i));
+            }
+//            if(len & 2 == 1){
+//                workbook.add(var.get(-1));
+//            }
+        }
+        Collections.shuffle(workbook);
+        return workbook;
     }
 }

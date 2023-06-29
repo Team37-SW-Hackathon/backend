@@ -32,6 +32,10 @@ public class ExamService {
     private final ExamRepository examRepository;
     private final GptService gptService;
     private final FileUploadService fileUploadService;
+
+    public List<String> passageList;
+    public List<String> answerList;
+    public List<String> questionList;
     public static final String first_prompt_1 = "위 영어지문을 한 문장, 10단어 이내로 영어로 요약하세요\n.json 타입으로 key값은 summary를 사용하세요.";
     public static final String second_prompt_1 = "위 요약문에서 핵심 단어 하나를 Json타입으로 작성하세요. key 값은 \"word\"를 사용하세요";
     public static final String third_prompt_1 = "위 요약문에서 {word} 단어를 지우고 그 위치에 @@@기호를 넣어서 새 요약문을 Json타입으로 작성하세요. key 값은 \"script\"를 사용하세요.\n";
@@ -85,89 +89,160 @@ public class ExamService {
         return gptService.getAnswer(new GptQuestionRequest(string + "\n\n" + first_prompt_3 + "\n" + second_prompt_3));
     }
 
+    public void type_1(String passage) {
+        List<String> wrong_answer = new ArrayList<>();
+
+        String summary = first_question_1(passage);
+        String word = second_question_1(summary);
+        String script = third_question_1(summary);
+        String answer = fourth_question_1(word);
+
+        JSONObject jObject1 = new JSONObject(summary);
+        summary = jObject1.getString("summary");
+
+        JSONObject jObject2 = new JSONObject(summary);
+        word = jObject2.getString("word");
+
+        JSONObject jObject3 = new JSONObject(script);
+        script = jObject3.getString("script");
+
+        JSONObject jObject4 = new JSONObject(answer);
+        wrong_answer.add(jObject4.getString("1"));
+        wrong_answer.add(jObject4.getString("2"));
+        wrong_answer.add(jObject4.getString("3"));
+        wrong_answer.add(word);
+
+        Collections.shuffle(wrong_answer);
+
+        questionList.add(script);
+        questionList.add("\n1. " + wrong_answer.get(0) + "\n2. " + wrong_answer.get(1) + "\n3. " + wrong_answer.get(2) + "\n4. " + wrong_answer.get(3) + "\n\n");
+        answerList.add(word);
+    }
+
+    public void type_2 (String passage) {
+        ArrayList<String> wrong_answer = new ArrayList<>();
+
+        String ret1 = first_question_2(passage);
+        String ret2 = second_question_2(passage);
+        String ret3 = third_question_2(passage);
+
+        JSONObject jObject1 = new JSONObject(ret1);
+        String word = jObject1.getString("word");
+
+        JSONObject jObject2 = new JSONObject(ret2);
+        String changed_word = jObject2.getString("changed_word");
+        String scipt = jObject2.getString("script");
+
+        JSONObject jObject3 = new JSONObject(ret3);
+        wrong_answer.add(jObject3.getString("1"));
+        wrong_answer.add(jObject3.getString("2"));
+        wrong_answer.add(jObject3.getString("3"));
+        wrong_answer.add(changed_word);
+
+        Collections.shuffle(wrong_answer);
+        questionList.add(scipt);
+        questionList.add("\n1. " + wrong_answer.get(0) + "\n2. " + wrong_answer.get(1) + "\n3. " + wrong_answer.get(2) + "\n4. " + wrong_answer.get(3) + "\n\n");
+        answerList.add(changed_word);
+    }
+
+    public void type_3 (String passage) {
+        String ret =  gptService.getAnswer(new GptQuestionRequest(passage + "\n\n" + "위 영어 지문에 대해서 주제 선택하는 객관식 문제를 1 개 작성하세요.\n" + "문제는 question, options , answer, explanation이 key인 json 타입으로 작성하세요." + "options의 key는\"1,2,3,4\"로 작성하세요.\n" +
+                "\n" +
+                "문제가 여러개라면 array 타입으로 감싸세요.\n" +
+                "\n" +
+                "explanation은 3문장 이상 상세하게 설명하세요."));
+
+        JSONArray jsonArray = new JSONArray(ret);
+
+        for (int i = 0; i < jsonArray.length(); i++) {
+            JSONObject jsonObject = jsonArray.getJSONObject(i);
+            String question = jsonObject.getString("question");
+            JSONObject options = jsonObject.getJSONObject("options");
+            String answer = jsonObject.getString("answer");
+            String explanation = jsonObject.getString("explanation");
+
+            explanation = gptService.getAnswer(new GptQuestionRequest(explanation + "\n\n" + "위의 문장을 한국말로 번역해주세요."));
+            questionList.add(question + "\n" + explanation + "\n\n" + "\n1. " + options.getString("1") + "\n2. " + options.getString("2") + "\n3. " + options.getString("3") + "\n4. " + options.getString("4") + "\n\n");
+            answerList.add(answer);
+        }
+    }
+
+    public void type_4 (String passage) {
+        String ret =  gptService.getAnswer(new GptQuestionRequest(passage + "\n\n" + "위 영어 지문에 대해서 요지 선택하는 객관식 문제를 1 개 작성하세요.\n" +
+                "\n" +
+                "각 문제는 question, options , answer, explanation이 key인 json 타입으로 작성하세요." +
+                "\n" +
+                "문제가 여러개라면 array 타입으로 감싸세요.\n" +
+                "\n" +
+                "explanation은 3문장 이상 상세하게 설명하세요."));
+
+        JSONArray jsonArray = new JSONArray(ret);
+
+        for (int i = 0; i < jsonArray.length(); i++) {
+            JSONObject jsonObject = jsonArray.getJSONObject(i);
+            String question = jsonObject.getString("question");
+            JSONObject options = jsonObject.getJSONObject("options");
+            String answer = jsonObject.getString("answer");
+            String explanation = jsonObject.getString("explanation");
+
+            explanation = gptService.getAnswer(new GptQuestionRequest(explanation + "\n\n" + "위의 문장을 한국말로 번역해주세요."));
+            questionList.add(question + "\n" + explanation + "\n\n" + "\n1. " + options.getString("1") + "\n2. " + options.getString("2") + "\n3. " + options.getString("3") + "\n4. " + options.getString("4") + "\n\n");
+            answerList.add(answer);
+        }
+    }
+
+    public void type_5 (String passage) {
+        String ret =  gptService.getAnswer(new GptQuestionRequest(passage + "\n\n" + "위 영어 지문에 대해서 제목을 고르는 객관식 문제를 1 개 작성하세요.\n" +
+                "\n" +
+                "각 문제는 question, options , answer, explanation이 key인 json 타입으로 작성하세요." +
+                "\n" +
+                "문제가 여러개라면 array 타입으로 감싸세요.\n" +
+                "\n" +
+                "explanation은 3문장 이상 상세하게 설명하세요."));
+
+        JSONArray jsonArray = new JSONArray(ret);
+
+        for (int i = 0; i < jsonArray.length(); i++) {
+            JSONObject jsonObject = jsonArray.getJSONObject(i);
+            String question = jsonObject.getString("question");
+            JSONObject options = jsonObject.getJSONObject("options");
+            String answer = jsonObject.getString("answer");
+            String explanation = jsonObject.getString("explanation");
+
+            explanation = gptService.getAnswer(new GptQuestionRequest(explanation + "\n\n" + "위의 문장을 한국말로 번역해주세요."));
+            questionList.add(question + "\n" + explanation + "\n\n" + "\n1. " + options.getString("1") + "\n2. " + options.getString("2") + "\n3. " + options.getString("3") + "\n4. " + options.getString("4") + "\n\n");
+            answerList.add(answer);
+        }
+    }
+
 
     public void makeExam(String originalFileUrl, int subject, List<Integer> questionType, int startPage, int endPage) throws IOException {
         // 1. pdf ->  word -> text 변환
         // 2. 지문 추출
 
-
-        List<String> passageList = new ArrayList<>();
+        passageList = new ArrayList<>();
         // 3. GPT => 문제 만들어줘
-        List<String> questionList = new ArrayList<>();
-        List<String> answerList = new ArrayList<>();
+        questionList = new ArrayList<>();
+        answerList = new ArrayList<>();
+
+        int circle = 1;
 
         for (String passage : passageList) {
-            List<String> wrong_answer = new ArrayList<>();
-
-            String summary = first_question_1(passage);
-            String word = second_question_1(summary);
-            String script = third_question_1(summary);
-            String answer = fourth_question_1(word);
-
-            JSONObject jObject1 = new JSONObject(summary);
-            summary = jObject1.getString("summary");
-
-            JSONObject jObject2 = new JSONObject(summary);
-            word = jObject2.getString("word");
-
-            JSONObject jObject3 = new JSONObject(script);
-            script = jObject3.getString("script");
-
-            JSONObject jObject4 = new JSONObject(answer);
-            wrong_answer.add(jObject4.getString("1"));
-            wrong_answer.add(jObject4.getString("2"));
-            wrong_answer.add(jObject4.getString("3"));
-            wrong_answer.add(word);
-
-            Collections.shuffle(wrong_answer);
-
-            questionList.add(script);
-            questionList.add("\n1. " + wrong_answer.get(0) + "\n2. " + wrong_answer.get(1) + "\n3. " + wrong_answer.get(2) + "\n4. " + wrong_answer.get(3) + "\n\n");
-            answerList.add(word);
-        }
-
-        for (String passage : passageList) {
-            ArrayList<String> wrong_answer = new ArrayList<>();
-
-            String ret1 = first_question_2(passage);
-            String ret2 = second_question_2(passage);
-            String ret3 = third_question_2(passage);
-
-            JSONObject jObject1 = new JSONObject(ret1);
-            String word = jObject1.getString("word");
-
-            JSONObject jObject2 = new JSONObject(ret2);
-            String changed_word = jObject2.getString("changed_word");
-            String scipt = jObject2.getString("script");
-
-            JSONObject jObject3 = new JSONObject(ret3);
-            wrong_answer.add(jObject3.getString("1"));
-            wrong_answer.add(jObject3.getString("2"));
-            wrong_answer.add(jObject3.getString("3"));
-            wrong_answer.add(changed_word);
-
-            Collections.shuffle(wrong_answer);
-            questionList.add(scipt);
-            questionList.add("\n1. " + wrong_answer.get(0) + "\n2. " + wrong_answer.get(1) + "\n3. " + wrong_answer.get(2) + "\n4. " + wrong_answer.get(3) + "\n\n");
-            answerList.add(changed_word);
-        }
-
-        for (String passage : passageList) {
-
-            String ret1 = first_question_3(passage);
-
-            JSONArray jsonArray = new JSONArray(ret1);
-
-            for (int i = 0; i < jsonArray.length(); i++) {
-                JSONObject jsonObject = jsonArray.getJSONObject(i);
-                String question = jsonObject.getString("question");
-                JSONObject options = jsonObject.getJSONObject("options");
-                String answer = jsonObject.getString("answer");
-                String explanation = jsonObject.getString("explanation");
-
-                questionList.add(question + "\n" + explanation + "\n\n" + "\n1. " + options.getString("1") + "\n2. " + options.getString("2") + "\n3. " + options.getString("3") + "\n4. " + options.getString("4") + "\n\n");
-                answerList.add(answer);
+            if (questionType.contains(circle)) {
+                if (circle == 1) {
+                    type_1(passage);
+                } else if (circle == 2) {
+                    type_2(passage);
+                } else if (circle == 3) {
+                    type_3(passage);
+                } else if (circle == 4) {
+                    type_4(passage);
+                } else if (circle == 5) {
+                    type_5(passage);
+                }
             }
+            circle += 1;
+            circle %= 5;
         }
         
         // 4. 문제를 파일로
@@ -186,7 +261,6 @@ public class ExamService {
                 .examFileName(examFileName)
                 .build();
         examRepository.save(entity);
-
     }
 
     public String createDocument(List<String> passageList, List<String> questionList) {

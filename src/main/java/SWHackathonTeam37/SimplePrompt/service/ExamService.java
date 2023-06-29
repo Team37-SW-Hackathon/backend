@@ -17,6 +17,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
@@ -130,30 +131,67 @@ public class ExamService {
     }
 
     public List<String> workbook1(String doc){
-        List<String> workbook = List.of(doc.split(" "));
-        Collections.shuffle(workbook);
-        return workbook;
+
+        String[] workbook;
+
+        workbook = doc.split(" ");
+
+        List<String> list =Arrays.asList(workbook);
+
+        Collections.shuffle(list);
+
+        return list;
     }
+
 
     public List<String> workbook2(String doc){
-        List<String> workbook = List.of(doc.split("."));
-        return workbook;
+
+        String[] workbook;
+
+        workbook = doc.split(".");
+
+        List<String> list =Arrays.asList(workbook);
+        
+        return list;
+
     }
 
-    public List<String> workbook3(String doc){
-        List<String> var = List.of(doc.split("."));
-        int len = var.size();
+        public List<String> workbook3(String doc){
 
-        List<String> workbook = new ArrayList<>();
-        if (len > 1) {
-            for(int i = 1 ; i < len ; i += 2){
-                workbook.add(var.get(i-1) + var.get(i));
+        String[] var;
+        
+        int len = 0;
+
+
+
+        var = doc.split(".");
+
+        len = var.length;
+
+        List<String> workbook = new ArrayList<String>();
+        String sentence = "";
+
+        if (len>1){
+            for(int i = 1 ; i < len/3 ; i++){
+                sentence += var[i];
             }
-//            if(len & 2 == 1){
-//                workbook.add(var.get(-1));
-//            }
+                workbook.add(sentence);
+                sentence = "";
+            for(int i = len/3 ; i< 2*len/3;i++){
+                sentence += var[i];
+            }
+                workbook.add(sentence);
+                sentence = "";
+            for(int i = 2 * len/3 ; i< len;i++){
+                sentence += var[i];
+            }
+                workbook.add(sentence);
         }
+        
         Collections.shuffle(workbook);
+
         return workbook;
     }
 }
+
+

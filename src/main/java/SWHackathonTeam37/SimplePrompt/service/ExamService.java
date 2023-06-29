@@ -1,7 +1,10 @@
 package SWHackathonTeam37.SimplePrompt.service;
 
 import SWHackathonTeam37.SimplePrompt.domain.ExamRepository;
+import SWHackathonTeam37.SimplePrompt.service.dto.response.ExamAssembler;
+import SWHackathonTeam37.SimplePrompt.service.dto.response.SimpleExam;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -74,6 +77,15 @@ public class ExamService {
     }
 
     private void uploadToAmazonS3() {
+    public ExamAssembler getList(int subject) {
+        Slice<SimpleExam> result = examRepository.findExamBySubject(subject);
+        return new ExamAssembler(result.getContent(), result.hasNext());
+    }
 
+
+    public void deleteList(List<Long> idList) {
+        for (Long id : idList) {
+            examRepository.deleteById(id);
+        }
     }
 }

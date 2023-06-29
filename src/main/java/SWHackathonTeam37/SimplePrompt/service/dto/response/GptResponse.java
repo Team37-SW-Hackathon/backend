@@ -1,4 +1,4 @@
-package SWHackathonTeam37.SimplePrompt.controller.dto.response;
+package SWHackathonTeam37.SimplePrompt.service.dto.response;
 
 import SWHackathonTeam37.SimplePrompt.domain.vo.Choice;
 

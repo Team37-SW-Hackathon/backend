@@ -1,8 +1,9 @@
 package SWHackathonTeam37.SimplePrompt.controller;
 
+import SWHackathonTeam37.SimplePrompt.config.GptConfig;
 import SWHackathonTeam37.SimplePrompt.controller.dto.request.GptQuestionRequest;
-import SWHackathonTeam37.SimplePrompt.controller.dto.response.GptResponse;
 import SWHackathonTeam37.SimplePrompt.service.GptService;
+import SWHackathonTeam37.SimplePrompt.service.dto.response.GptResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,6 +25,9 @@ public class GptController {
 
     @PostMapping("/questions")
     public GptResponse sendRequest(@RequestBody @Valid GptQuestionRequest request) {
+        System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+        System.out.println(GptConfig.API_KEY);
+        System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
         return gptService.askRequest(request);
     }
 }

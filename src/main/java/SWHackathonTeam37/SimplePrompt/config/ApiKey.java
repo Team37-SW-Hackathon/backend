@@ -13,29 +13,8 @@ public class ApiKey {
     @Value("${gpt-key}")
     private String gptKey;
 
-    @Value("${aws-access-key}")
-    private String awsAccessKey;
-
-    @Value("${aws-secret-key}")
-    private String awsSecretKey;
-
-    @Value("${aws-region}")
-    private String awsRegion;
-
     public String getGptKey() {
         return gptKey;
-    }
-
-    public String getAwsAccessKey() {
-        return awsAccessKey;
-    }
-
-    public String getAwsSecretKey() {
-        return awsSecretKey;
-    }
-
-    public String getAwsRegion() {
-        return awsRegion;
     }
 
     private ApiKey() {}

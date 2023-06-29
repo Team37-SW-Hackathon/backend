@@ -1,24 +1,23 @@
 package SWHackathonTeam37.SimplePrompt.service;
 
-/**
- * Created by kok8454@gmail.com on 2023-06-29
- * Github : http://github.com/perArdua
- */
 import SWHackathonTeam37.SimplePrompt.config.GptConfig;
 import SWHackathonTeam37.SimplePrompt.controller.dto.request.GptQuestionRequest;
 import SWHackathonTeam37.SimplePrompt.controller.dto.request.GptRequest;
-import SWHackathonTeam37.SimplePrompt.controller.dto.response.GptResponse;
+import SWHackathonTeam37.SimplePrompt.service.dto.response.GptResponse;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 @Service
 public class GptService {
 
-    private static final RestTemplate restTemplate = new RestTemplate();
+    private static RestTemplate restTemplate = new RestTemplate();
+
+
     public HttpEntity<GptRequest> buildHttpEntity(GptRequest request) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.parseMediaType(GptConfig.MEDIA_TYPE));
@@ -36,6 +35,7 @@ public class GptService {
     }
 
     public GptResponse askRequest(GptQuestionRequest request) {
+        restTemplate.setRequestFactory(new HttpComponentsClientHttpRequestFactory());
         GptRequest gptRequest = new GptRequest(
                 GptConfig.MODEL,
                 request.question(),

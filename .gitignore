@@ -39,3 +39,4 @@ out/
 ### ADD ###
 *.yml
 *.properties
+toH2.sh

@@ -40,3 +40,4 @@ out/
 *.yml
 *.properties
 toH2.sh
+.gitignore

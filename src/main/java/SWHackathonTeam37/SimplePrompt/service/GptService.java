@@ -8,7 +8,7 @@ import SWHackathonTeam37.SimplePrompt.config.GptConfig;
 import SWHackathonTeam37.SimplePrompt.controller.dto.request.GptMessage;
 import SWHackathonTeam37.SimplePrompt.controller.dto.request.GptQuestionRequest;
 import SWHackathonTeam37.SimplePrompt.controller.dto.request.GptRequest;
-import SWHackathonTeam37.SimplePrompt.controller.dto.response.GptResponse;
+import SWHackathonTeam37.SimplePrompt.service.dto.response.GptResponse;
 import org.springframework.http.*;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Service;

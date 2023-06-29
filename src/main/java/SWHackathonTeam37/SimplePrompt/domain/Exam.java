@@ -30,6 +30,8 @@ public class Exam {
     @CreatedDate
     private LocalDate createDate;
 
+    private int totalCount;
+
 //    private Exam(int subject, String originalFileUrl, String examFileUrl, String answerFileUrl) {
 //        this.subject = subject;
 //        this. originalFileUrl = originalFileUrl;

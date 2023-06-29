@@ -15,14 +15,16 @@ public class SimpleExam {
     private final LocalDate createDate;
     private final String examFileUrl;
     private final String answerFileUrl;
+    private final int totalCount;
 
     @QueryProjection
-    public SimpleExam(long id, int subject, String examFileName, LocalDate createDate, String examFileUrl, String answerFileUrl) {
+    public SimpleExam(long id, int subject, String examFileName, LocalDate createDate, String examFileUrl, String answerFileUrl, int totalCount) {
         this.id = id;
         this.subject = subject;
         this.examFileName = examFileName;
         this.createDate = createDate;
         this.examFileUrl = examFileUrl;
         this.answerFileUrl = answerFileUrl;
+        this.totalCount = totalCount;
     }
 }

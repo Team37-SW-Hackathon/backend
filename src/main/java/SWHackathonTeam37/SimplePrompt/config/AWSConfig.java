@@ -10,14 +10,9 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class AWSConfig {
-    @Value("${cloud.aws.credentials.accessKey}")
-    private String accessKey;
-
-    @Value("${cloud.aws.credentials.secretKey}")
-    private String accessSecret;
-
-    @Value("${cloud.aws.region.static}")
-    private String region;
+    private final String accessKey = ApiKey.getInstance().getAwsAccessKey();
+    private final String accessSecret = ApiKey.getInstance().getAwsSecretKey();
+    private final String region = ApiKey.getInstance().getAwsRegion();
 
     @Bean
     public AmazonS3Client amazonS3Client() {

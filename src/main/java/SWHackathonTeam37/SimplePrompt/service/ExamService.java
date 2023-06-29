@@ -24,4 +24,8 @@ public class ExamService {
         // 4. 문제를 파일로
         // 5. 클라우드에 파일 올리기
     }
+
+    private void uploadToAmazonS3() {
+
+    }
 }

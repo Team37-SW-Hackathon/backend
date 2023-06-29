@@ -23,18 +23,17 @@ public class AWSConfig {
                 .build();
     }
 
-    // 여기 아래부분에 Value부분만 맞게 조절하시면 됩ㄴ디ㅏ
-    @Value("${aws-access-key}")
+    @Value("${cloud.aws.credentials.accessKey}")
     public void setAccessKey(String value) {
         accessKey = value;
     }
 
-    @Value("${aws-secret-key}")
+    @Value("${cloud.aws.credentials.secretKey}")
     public void setAccessSecret(String value) {
         accessSecret = value;
     }
 
-    @Value("${aws-region}")
+    @Value("${cloud.aws.region.static}")
     public void setRegion(String value) {
         region = value;
     }

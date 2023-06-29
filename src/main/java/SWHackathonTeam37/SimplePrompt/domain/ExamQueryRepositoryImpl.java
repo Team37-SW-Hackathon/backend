@@ -40,7 +40,6 @@ public class ExamQueryRepositoryImpl implements ExamQueryRepository {
         if (contentSize == pageable.getPageSize()) {
             return (long) contentSize * (pageable.getPageNumber() + 1) != totalCount;
         }
-
         return false;
     }
 }

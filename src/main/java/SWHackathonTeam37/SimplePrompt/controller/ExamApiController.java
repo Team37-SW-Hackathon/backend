@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -25,5 +26,11 @@ public class ExamApiController {
     public ResponseEntity<ExamAssembler> getList(@RequestBody int subject) { // 0 전체, 1 국어, 2 영어
         ExamAssembler response = examService.getList(subject);
         return ResponseEntity.ok(response);
+    }
+
+    @DeleteMapping("")
+    public ResponseEntity<Void> delete(@RequestBody List<Long> idList) {
+        examService.deleteList(idList);
+        return ResponseEntity.ok().build();
     }
 }

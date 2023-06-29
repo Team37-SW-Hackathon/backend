@@ -55,9 +55,12 @@ dependencies {
 	implementation 'com.aspose:aspose-words:22.10:jdk17'
 	implementation 'org.apache.poi:poi:4.1.2'
 	implementation 'org.apache.poi:poi-ooxml:4.1.2'
+	implementation 'org.json:json:20190722'
+
 
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'com.mysql:mysql-connector-j' // local & prod
+
 }
 
 tasks.named('test') {

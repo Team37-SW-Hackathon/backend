@@ -131,67 +131,42 @@ public class ExamService {
     }
 
     public List<String> workbook1(String doc){
-
-        String[] workbook;
-
-        workbook = doc.split(" ");
-
-        List<String> list =Arrays.asList(workbook);
-
+        String[] workbook = doc.split(" ");
+        List<String> list = Arrays.asList(workbook);
         Collections.shuffle(list);
-
         return list;
     }
 
-
-    public List<String> workbook2(String doc){
-
-        String[] workbook;
-
-        workbook = doc.split(".");
-
+    public List<String> workbook2(String doc) {
+        String[] workbook = doc.split(".");
         List<String> list =Arrays.asList(workbook);
-        
         return list;
-
     }
 
-        public List<String> workbook3(String doc){
-
-        String[] var;
-        
-        int len = 0;
-
-
-
-        var = doc.split(".");
-
-        len = var.length;
+    public List<String> workbook3(String doc) {
+        String[] var = doc.split(".");
+        int len = var.length;
 
         List<String> workbook = new ArrayList<String>();
         String sentence = "";
-
-        if (len>1){
-            for(int i = 1 ; i < len/3 ; i++){
+        if (len > 1) {
+            for (int i = 1 ; i < len / 3 ; i++) {
                 sentence += var[i];
             }
-                workbook.add(sentence);
-                sentence = "";
-            for(int i = len/3 ; i< 2*len/3;i++){
+            workbook.add(sentence);
+            sentence = "";
+            for (int i = len / 3 ; i < 2 * len / 3; i++) {
                 sentence += var[i];
             }
-                workbook.add(sentence);
-                sentence = "";
-            for(int i = 2 * len/3 ; i< len;i++){
+            workbook.add(sentence);
+            sentence = "";
+            for(int i = 2 * len / 3 ; i < len; i++) {
                 sentence += var[i];
             }
-                workbook.add(sentence);
+            workbook.add(sentence);
         }
-        
-        Collections.shuffle(workbook);
 
+        Collections.shuffle(workbook);
         return workbook;
     }
 }
-
-

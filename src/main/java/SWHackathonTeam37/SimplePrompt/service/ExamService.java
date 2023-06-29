@@ -32,4 +32,10 @@ public class ExamService {
         Slice<SimpleExam> result = examRepository.findExamBySubject(subject);
         return new ExamAssembler(result.getContent(), result.hasNext());
     }
+
+    public void deleteList(List<Long> idList) {
+        for (Long id : idList) {
+            examRepository.deleteById(id);
+        }
+    }
 }

@@ -1,5 +1,6 @@
 package SWHackathonTeam37.SimplePrompt.service;
 
+import SWHackathonTeam37.SimplePrompt.controller.dto.request.GptQuestionRequest;
 import SWHackathonTeam37.SimplePrompt.domain.ExamRepository;
 import SWHackathonTeam37.SimplePrompt.service.dto.response.ExamAssembler;
 import SWHackathonTeam37.SimplePrompt.service.dto.response.SimpleExam;
@@ -23,6 +24,27 @@ import java.util.Random;
 @RequiredArgsConstructor
 public class ExamService {
     private final ExamRepository examRepository;
+    private final GptService gptService;
+    public static final String first_prompt = "위 영어지문을 한 문장, 10단어 이내로 영어로 요약하세요\n.json 타입으로 key값은 summary를 사용하세요.";
+    public static final String second_prompt = "위 요약문에서 핵심 단어 하나를 Json타입으로 작성하세요. key 값은 \"word\"를 사용하세요";
+    public static final String third_prompt = "위 요약문에서 {word} 단어를 지우고 그 위치에 @@@기호를 넣어서 새 요약문을 Json타입으로 작성하세요. key 값은 \"script\"를 사용하세요.\n";
+    public static final String fourth_prompt = "{word} 단어와 거리가 먼 단어 세 개를 작성하세요. key값은 \"1,2,3\"을 사용하세요.";
+
+    public String first_question(String passage) {
+        return gptService.getAnswer(new GptQuestionRequest(passage + "\n\n" + first_prompt));
+    }
+
+    public String second_question(String summary) {
+        return gptService.getAnswer(new GptQuestionRequest(summary + "\n\n" + second_prompt));
+    }
+
+    public String third_question(String summary) {
+        return gptService.getAnswer(new GptQuestionRequest(summary + "\n\n" + third_prompt));
+    }
+    public String fourth_question(String word) {
+        return gptService.getAnswer(new GptQuestionRequest(word + "\n\n" + fourth_prompt));
+    }
+
 
     public void makeExam(String originalFileUrl, int subject, int exampType, int questionType) {
         // 1. pdf ->  word -> text 변환
@@ -31,6 +53,20 @@ public class ExamService {
         // 3. GPT => 문제 만들어줘
         List<String> questionList = new ArrayList<>();
         List<String> answerList = new ArrayList<>();
+
+        for (String passage : passageList) {
+            String summary = first_question(passage);
+            String word = second_question(summary);
+            String script = third_question(summary);
+            String answer = fourth_question(word);
+
+            questionList.add(script);
+            answerList.add(word);
+            answerList.add(answer);
+        }
+
+
+
         // 4. 문제를 파일로
         // 5. 클라우드에 파일 올리기
     }

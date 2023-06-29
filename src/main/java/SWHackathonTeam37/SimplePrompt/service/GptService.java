@@ -26,10 +26,10 @@ public class GptService {
         return new HttpEntity<>(request, headers);
     }
 
-    public GptResponse getResponse(HttpEntity<GptRequest> chatGptRequestDtoHttpEntity) {
+    public GptResponse getResponse(HttpEntity<GptRequest> requestedHttpEntity) {
         ResponseEntity<GptResponse> responseEntity = restTemplate.postForEntity(
                 GptConfig.URL,
-                chatGptRequestDtoHttpEntity,
+                requestedHttpEntity,
                 GptResponse.class);
 
         return responseEntity.getBody();

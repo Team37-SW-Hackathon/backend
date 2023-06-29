@@ -12,12 +12,13 @@ public class GptConfig {
     public static String AUTHORIZATION = "Authorization";
     public static String BEARER = "Bearer ";
     public static String API_KEY;
-    public static String MODEL = "text-davinci-003";
+    public static String MODEL = "gpt-3.5-turbo";
     public static Integer MAX_TOKEN = 300;
     public static Double TEMPERATURE = 0.0;
     public static Double TOP_P = 1.0;
+    public static final String ROLE = "user";
     public static String MEDIA_TYPE = "application/json; charset=UTF-8";
-    public static String URL = "https://api.openai.com/v1/completions";
+    public static String URL = "https://api.openai.com/v1/chat/completions";
 
     @Value("${gpt-key}")
     public void setKey(String value) {
